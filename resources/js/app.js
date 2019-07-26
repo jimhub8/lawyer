@@ -8,7 +8,6 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 window.eventBus = new Vue()
-import Vuex from 'vuex'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import VueRouter from 'vue-router'
@@ -20,6 +19,21 @@ import 'element-ui/lib/theme-chalk/index.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 // // import Buefy from 'buefy'
 // import 'buefy/dist/buefy.css'
+
+
+
+
+import Vuex from 'vuex';
+import FileManager from 'laravel-file-manager'
+
+Vue.use(Vuex);
+
+// create Vuex store, if you don't have it
+// const store = new Vuex.Store();
+const store = new Vuex.Store(StoreData)
+
+Vue.use(FileManager, {store});
+
 
 import VueGoodTablePlugin from 'vue-good-table';
 
@@ -49,7 +63,7 @@ Vue.use(Vuex)
 Vue.use(ElementUI, { locale });
 // Vue.use(Buefy)
 
-const store = new Vuex.Store(StoreData)
+// const store = new Vuex.Store(StoreData)
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -61,7 +75,7 @@ const store = new Vuex.Store(StoreData)
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 import myHeader from './components/include/HeadView'
 import myDashboard from './components/Dashboard';
 import myUser from './components/users/User';
@@ -70,6 +84,7 @@ import myClient from './components/client/Client.vue';
 import myFirm from './components/firm/Firm';
 
 import myCase from './components/cases/Cases';
+import myTest from './components/Test';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -83,6 +98,9 @@ const routes = [
     { path: '/clients', component: myClient },
     { path: '/firms', component: myFirm },
     { path: '/cases', component: myCase },
+
+    { path: '/test', component: myTest },
+
 ]
 const router = new VueRouter({
     // mode: 'history',
@@ -96,6 +114,31 @@ const app = new Vue({
     store,
     router,
     components: {
-        myHeader, myUser, myClient, myFirm, myCase
+        myHeader, myUser, myClient, myFirm, myCase, myTest
     },
+
+
+    // headers: {
+    //     'X-Requested-With': 'XMLHttpRequest',
+    //     'Authorization': 'Bearer ...'
+    // },
+    // default headers example
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-TOKEN': 'set laravel csrf token here...'
+    },
+
+    baseUrl: 'http://127.0.0.1:8002/file-manager/',  // overwrite base url Axios
+    windowsConfig: 2,
+    // lang: 'de',                                 // set language
+    translation: {                              // add new translation
+        // name: de,
+        content: {
+            about: 'Über',
+            back: 'Zurück',
+            // ... see lang file structure
+        },
+    },
+
+
 });

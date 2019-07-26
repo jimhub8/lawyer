@@ -307,3 +307,14 @@ label {
     width: 100% !important;
 }
 }
+
+
+
+.fm {
+    height: 80vh !important;
+    width: 100% !important;
+}
+
+.fm-navbar .btn-group .fa-question {
+    display: none;
+}
