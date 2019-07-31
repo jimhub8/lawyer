@@ -22,4 +22,9 @@ class Client extends Model
     {
         return $this->hasMany('App\models\Saleorder', 'sender_id');
     }
+
+    public function cases()
+    {
+        return $this->hasMany('App\models\Case', 'client_id');
+    }
 }

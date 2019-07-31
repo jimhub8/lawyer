@@ -12,8 +12,8 @@ use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-	use Notifiable, SoftDeletes;
-	use HasRoles, HasApiTokens;
+    use Notifiable, SoftDeletes;
+    use HasRoles, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -42,20 +42,20 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-	/**
-	 * Get all user permissions.
-	 *
-	 * @return bool
-	 */
-	public function getAllPermissionsAttribute()
-	{
-		return $this->getAllPermissions();
-	}
-	// public function getReferrals()
-	// {
-	// 	return ReferralProgram::all()->map(function ($program) {
-	// 		return ReferralLink::getReferral($this, $program);
-	// 	});
+    /**
+     * Get all user permissions.
+     *
+     * @return bool
+     */
+    public function getAllPermissionsAttribute()
+    {
+        return $this->getAllPermissions();
+    }
+    // public function getReferrals()
+    // {
+    // 	return ReferralProgram::all()->map(function ($program) {
+    // 		return ReferralLink::getReferral($this, $program);
+    // 	});
     // }
 
 
@@ -64,18 +64,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('M-d-Y');
     }
 
-    public function orders()
-    {
-        return $this->hasOne('App\models\Saleorder', 'user_id');
-    }
 
-    public function returns()
+    public function cases()
     {
-        return $this->hasOne('App\models\ReceiveReturns', 'user_id');
-    }
-
-    public function sale()
-    {
-        return $this->hasOne('App\models\Sale', 'user_id');
+        return $this->hasMany('App\models\Case', 'practice_area');
     }
 }

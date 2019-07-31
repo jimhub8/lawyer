@@ -26,12 +26,49 @@
                                         <el-tag type="success">{{props.row.created_at}}</el-tag>
                                     </span>
                                 </span>
+                                <span v-else-if="props.column.field == 'firm_name'">
+                                    <span>
+                                       {{props.row.firm.name}}
+                                    </span>
+                                </span>
+                                <span v-else-if="props.column.field == 'status_title'">
+                                    <span>
+                                       <el-tag type="info">{{props.row.status.status}}</el-tag>
+                                    </span>
+                                </span>
+                                <span v-else-if="props.column.field == 'client_name'">
+                                    <span>
+                                       {{props.row.client.name}}
+                                    </span>
+                                </span>
+                                <span v-else-if="props.column.field == 'leading_a'">
+                                    <span>
+                                       {{props.row.leading_attoney.name}}
+                                    </span>
+                                </span>
+                                <span v-else-if="props.column.field == 'practice_a'">
+                                    <span>
+                                       {{props.row.practice_area.area}}
+                                    </span>
+                                </span>
                                 <span v-else-if="props.column.field == 'actions'">
                                     <v-tooltip bottom>
                                         <v-btn icon class="mx-0" @click="openEdit(props.row)" slot="activator">
                                             <v-icon small color="blue darken-2">edit</v-icon>
                                         </v-btn>
                                         <span>Edit</span>
+                                    </v-tooltip>
+                                    <v-tooltip bottom>
+                                        <v-btn icon class="mx-0" @click="openShow(props.row)" slot="activator">
+                                            <v-icon small color="info darken-2">visibility</v-icon>
+                                        </v-btn>
+                                        <span>View</span>
+                                    </v-tooltip>
+                                    <v-tooltip bottom>
+                                        <v-btn icon class="mx-0" @click="openEvent(props.row)" slot="activator">
+                                            <v-icon small color="info darken-2">visibility</v-icon>
+                                        </v-btn>
+                                        <span>View</span>
                                     </v-tooltip>
                                     <v-tooltip bottom>
                                         <v-btn icon class="mx-0" @click="deleteItem(props.row)" slot="activator">
@@ -41,7 +78,7 @@
                                     </v-tooltip>
                                 </span>
                                 <span v-else>
-                                    {{props.formattedRow[props.column.field]}}
+                                    {{ props.formattedRow[props.column.field] }}
                                 </span>
                             </template>
                         </vue-good-table>
@@ -52,19 +89,19 @@
     </v-content>
     <Create></Create>
     <Edit></Edit>
-    <!-- <Show></Show> -->
+    <Show></Show>
 </div>
 </template>
 
 <script>
 import Create from './Create';
 import Edit from './Edit';
-// import Show from './Show';
+import Show from './Show';
 export default {
     components: {
         Create,
         Edit,
-        // Show
+        Show
     },
     data() {
         return {
@@ -88,11 +125,11 @@ export default {
                 },
                 {
                     label: 'Client name',
-                    field: 'client_id',
+                    field: 'client_name',
                 },
                 {
                     label: 'Firm',
-                    field: 'firm',
+                    field: 'firm_name',
                 },
                 {
                     label: 'Firm Member',
@@ -100,15 +137,15 @@ export default {
                 },
                 {
                     label: 'Status',
-                    field: 'status',
+                    field: 'status_title',
                 },
                 {
                     label: 'Practice area',
-                    field: 'practice_area',
+                    field: 'practice_a',
                 },
                 {
                     label: 'Leading Attoney',
-                    field: 'leading_attoney',
+                    field: 'leading_a',
                 },
                 {
                     label: 'Created On',
@@ -136,9 +173,11 @@ export default {
         openEdit(data) {
             eventBus.$emit('openEditBox', data)
         },
-
         openShow(data) {
-            eventBus.$emit('openShowBox', data)
+            eventBus.$emit('openShowEvent', data)
+        },
+        openEvent(data) {
+            eventBus.$emit('openShowEvent', data)
         },
         getCases() {
             eventBus.$emit("LoadingEvent");

@@ -84,7 +84,8 @@ import myClient from './components/client/Client.vue';
 import myFirm from './components/firm/Firm';
 
 import myCase from './components/cases/Cases';
-import myTest from './components/Test';
+import myFiles from './components/Test';
+import myCalendar from './components/calendar/Calendar';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -99,7 +100,9 @@ const routes = [
     { path: '/firms', component: myFirm },
     { path: '/cases', component: myCase },
 
-    { path: '/test', component: myTest },
+    { path: '/calendar', component: myCalendar },
+    { path: '/files', component: myFiles },
+    // { path: '/test', component: myTest },
 
 ]
 const router = new VueRouter({
@@ -114,7 +117,8 @@ const app = new Vue({
     store,
     router,
     components: {
-        myHeader, myUser, myClient, myFirm, myCase, myTest
+        myHeader, myUser, myClient, myFirm, myCase, myCalendar, myFiles,
+        // myTest
     },
 
 

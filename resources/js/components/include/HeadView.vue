@@ -39,6 +39,14 @@
                         </div>
                     </router-link>
 
+                    <router-link to="/calendar" class="v-list__tile v-list__tile--link">
+                        <div class="v-list__tile__action">
+                            <i aria-hidden="true" class="icon material-icons">event</i>
+                        </div>
+                        <div class="v-list__tile__content">
+                            <div class="v-list__tile__title">Calendar</div>
+                        </div>
+                    </router-link>
                     <router-link to="/firms" class="v-list__tile v-list__tile--link">
                         <div class="v-list__tile__action">
                             <i aria-hidden="true" class="icon material-icons">business</i>
@@ -47,6 +55,25 @@
                             <div class="v-list__tile__title">Firms</div>
                         </div>
                     </router-link>
+                    <v-list-group prepend-icon="book">
+                        <v-list-tile slot="activator">
+                            <v-list-tile-title>Cases</v-list-tile-title>
+                        </v-list-tile>
+                        <router-link to="/cases" class="v-list__tile theme--light" style="text-decoration: none">
+                            <v-list-tile-action>
+                                <v-icon>people_outline</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-title>Users</v-list-tile-title>
+                        </router-link>
+                        <router-link to="/files" class="v-list__tile v-list__tile--link">
+                            <div class="v-list__tile__action">
+                                <i aria-hidden="true" class="icon material-icons">book</i>
+                            </div>
+                            <div class="v-list__tile__content">
+                                <div class="v-list__tile__title">Case Files</div>
+                            </div>
+                        </router-link>
+                    </v-list-group>
 
                     <v-list-group prepend-icon="account_circle">
                         <v-list-tile slot="activator">
@@ -85,7 +112,7 @@
         </v-tooltip>
         <VSpacer />
         <Logout :user="user"></Logout>
-        <VDivider vertical style="margin-top: 0px;"/>
+        <VDivider vertical style="margin-top: 0px;" />
         <v-badge color="black" right overlap>
             <template v-slot:badge>
                 {{ notifications.length }}
