@@ -20,7 +20,7 @@ class CreateCasesTable extends Migration
             $table->integer('firm_id');
             $table->string('case');
             $table->string('case_no');
-            $table->string('case_stage')->nullable();
+            $table->integer('case_stage')->nullable();
             $table->string('next_stage')->nullable();
             $table->string('firm_member')->nullable();
             $table->integer('practice_area')->nullable();

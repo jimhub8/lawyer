@@ -36,7 +36,13 @@
                                     </div>
                                     <div>
                                         <label for="">Case stage</label>
-                                        <el-input placeholder="email" v-model="form.case_stage"></el-input>
+                                        <!-- <el-input placeholder="email" v-model="form.case_stage"></el-input> -->
+
+                                        <label for="">Case Stage</label>
+                                        <el-select v-model="form.status" clearable placeholder="Status" style="width: 100%;">
+                                            <el-option v-for="item in case_stage" :key="item.id" :label="item.stage" :value="item.id">
+                                            </el-option>
+                                        </el-select>
                                     </div>
                                     <div>
                                         <label for="">Firm member</label>
@@ -116,6 +122,9 @@ export default {
         },
         users() {
             return this.$store.getters.users
+        },
+        case_stage() {
+            return this.$store.getters.case_stage
         },
     },
     methods: {

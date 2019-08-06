@@ -4,10 +4,10 @@
         <v-card>
             <v-card-title>
                 Users
-                <download-excel :data="AllDelusers" :fields="json_fields">
+                <!-- <download-excel :data="AllDelusers" :fields="json_fields">
                     Export
                     <img src="/storage/csv.png" style="width: 30px; height: 30px; cursor: pointer;">
-                        </download-excel>
+                        </download-excel> -->
                     <v-spacer></v-spacer>
                     <v-text-field v-model="search" append-icon="search" label="Search" single-line></v-text-field>
             </v-card-title>

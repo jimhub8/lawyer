@@ -14,14 +14,11 @@ import VueRouter from 'vue-router'
 import StoreData from './store/store'
 import ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en'
-import 'element-ui/lib/theme-chalk/index.css';
+import 'element-ui/lib/theme-chalk/index.css'; 
 // import '@fortawesome/fontawesome-free/css/all.css' // Ensure you are using css-loader
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 // // import Buefy from 'buefy'
 // import 'buefy/dist/buefy.css'
-
-
-
 
 import Vuex from 'vuex';
 import FileManager from 'laravel-file-manager'
@@ -86,6 +83,7 @@ import myFirm from './components/firm/Firm';
 import myCase from './components/cases/Cases';
 import myFiles from './components/Test';
 import myCalendar from './components/calendar/Calendar';
+import myTasks from './components/task/Task';
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -102,6 +100,7 @@ const routes = [
 
     { path: '/calendar', component: myCalendar },
     { path: '/files', component: myFiles },
+    { path: '/tasks', component: myTasks },
     // { path: '/test', component: myTest },
 
 ]
@@ -117,7 +116,7 @@ const app = new Vue({
     store,
     router,
     components: {
-        myHeader, myUser, myClient, myFirm, myCase, myCalendar, myFiles,
+        myHeader, myUser, myClient, myFirm, myCase, myCalendar, myFiles, myTasks
         // myTest
     },
 

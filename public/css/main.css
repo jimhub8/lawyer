@@ -311,3 +311,9 @@ label {
 .theme--dark.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
     background-color: transparent;
 }
+
+
+.vgt-table.bordered td, .vgt-table.bordered th {
+    vertical-align: inherit !important;
+    padding: 5px !important;
+}

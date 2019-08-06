@@ -13,6 +13,10 @@ export default {
         firms: [],
         status: [],
         practice_area: [],
+        user_perm: [],
+        case_stage: [],
+        events: [],
+        tasks: [],
         cases: [],
         // Notifications
         notifications: [],

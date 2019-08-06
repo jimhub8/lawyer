@@ -28,6 +28,23 @@ export default {
             this.errors = error.response.data.errors
         })
     },
+    getUserPerm(context, payload) {
+        context.commit('loading', true)
+        axios.post(`/getUserPerm/${payload}`).then((response) => {
+            context.commit('updateUserPermList', response.data)
+            context.commit('loading', false)
+        }).catch((error) => {
+
+            if (error.response.status === 500) {
+                eventBus.$emit('errorEvent', error.response.statusText)
+                return
+            } else if (error.response.status === 401 || error.response.status === 409) {
+                eventBus.$emit('reloadRequest', error.response.statusText)
+            }
+            context.commit('loading', false)
+            this.errors = error.response.data.errors
+        })
+    },
 
     getClients(context) {
         context.commit('loading', true)
@@ -138,6 +155,76 @@ export default {
         context.commit('loading', true)
         axios.get('practice').then((response) => {
             context.commit('updatPracticeList', response.data)
+            context.commit('loading', false)
+        }).catch((error) => {
+
+            if (error.response.status === 500) {
+                eventBus.$emit('errorEvent', error.response.statusText)
+                return
+            } else if (error.response.status === 401 || error.response.status === 409) {
+                eventBus.$emit('reloadRequest', error.response.statusText)
+            }
+            context.commit('loading', false)
+            this.errors = error.response.data.errors
+        })
+    },
+    getTasks(context) {
+        context.commit('loading', true)
+        axios.get('tasks').then((response) => {
+            context.commit('updatTaskList', response.data)
+            context.commit('loading', false)
+        }).catch((error) => {
+
+            if (error.response.status === 500) {
+                eventBus.$emit('errorEvent', error.response.statusText)
+                return
+            } else if (error.response.status === 401 || error.response.status === 409) {
+                eventBus.$emit('reloadRequest', error.response.statusText)
+            }
+            context.commit('loading', false)
+            this.errors = error.response.data.errors
+        })
+    },
+    getcaseStage(context) {
+        context.commit('loading', true)
+        axios.get('stage').then((response) => {
+            context.commit('updatStageList', response.data)
+            context.commit('loading', false)
+        }).catch((error) => {
+
+            if (error.response.status === 500) {
+                eventBus.$emit('errorEvent', error.response.statusText)
+                return
+            } else if (error.response.status === 401 || error.response.status === 409) {
+                eventBus.$emit('reloadRequest', error.response.statusText)
+            }
+            context.commit('loading', false)
+            this.errors = error.response.data.errors
+        })
+    },
+    getEvents(context) {
+        context.commit('loading', true)
+        axios.get('events').then((response) => {
+            context.commit('updatEventList', response.data)
+            context.commit('loading', false)
+        }).catch((error) => {
+
+            if (error.response.status === 500) {
+                eventBus.$emit('errorEvent', error.response.statusText)
+                return
+            } else if (error.response.status === 401 || error.response.status === 409) {
+                eventBus.$emit('reloadRequest', error.response.statusText)
+            }
+            context.commit('loading', false)
+            this.errors = error.response.data.errors
+        })
+    },
+
+
+    filterCases(context, payload) {
+        context.commit('loading', true)
+        axios.post('filterCases', payload).then((response) => {
+            context.commit('updateCasesList', response.data)
             context.commit('loading', false)
         }).catch((error) => {
 

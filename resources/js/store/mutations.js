@@ -24,6 +24,9 @@ export default {
     updateFirmList(state, payload) {
         state.firms = payload
     },
+    updatStageList(state, payload) {
+        state.case_stage = payload
+    },
     updateCasesList(state, payload) {
         state.cases = payload
     },
@@ -33,6 +36,15 @@ export default {
     },
     updatPracticeList(state, payload) {
         state.practice_area = payload
+    },
+    updatTaskList(state, payload) {
+        state.tasks = payload
+    },
+    updatEventList(state, payload) {
+        state.events = payload
+    },
+    updateUserPermList(state, payload) {
+        state.user_perm = payload
     },
     // Notifications
     updatenotifications(state, payload) {

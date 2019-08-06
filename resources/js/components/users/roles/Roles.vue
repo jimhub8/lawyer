@@ -19,44 +19,36 @@
                         </v-tooltip>
                         <v-text-field v-model="search" append-icon="search" label="Search" single-line hide-details></v-text-field>
                     </v-card-title>
-                    <v-flex sm12>
-                        <section style="overflow: scroll;">
-                            <b-table :data="isEmpty ? [] : roles" :bordered="isBordered" :striped="isStriped" :narrowed="isNarrowed" :hoverable="isHoverable" :loading="isLoading" :focusable="isFocusable" :mobile-cards="hasMobileCards" :paginated="isPaginated" :per-page="perPage" :current-page.sync="currentPage" default-sort="name" default-sort-direction="desc">
-                                <template slot-scope="props">
-                                    <b-table-column sortable field="id" label="ID" width="40" numeric style="cursor: pointer">
-                                        <a @click="openEdit(props.row)">{{ props.row.id }}</a>
-                                    </b-table-column>
-                                    <b-table-column sortable field="name" label="NAME" width="40">
-                                        {{ props.row.name }}
-                                    </b-table-column>
-                                    <b-table-column sortable field="description" label="DESCRIPTION">
-                                        {{ props.row.description }}
-                                    </b-table-column>
-                                    <b-table-column sortable field="created_at" label="CREATED ON" centered>
-                                        <span class="tag is-info">
-                                            {{ props.row.created_at }}
-                                        </span>
-                                    </b-table-column>
-                                    <b-table-column sortable field="status" label="STATUS">
-                                        {{ props.row.status }}
-                                    </b-table-column>
-                                </template>
-
-                                <template slot="empty">
-                                    <section class="section">
-                                        <div class="content has-text-grey has-text-centered">
-                                            <p>
-                                                <b-icon icon="emoticon-sad" size="is-large">
-                                                </b-icon>
-                                            </p>
-                                            <p>Nothing here.</p>
-                                        </div>
-                                    </section>
-                                </template>
-                            </b-table>
-                        </section>
-                    </v-flex>
+                    <v-data-table :headers="headers" :items="roles" class="elevation-1" :search="search" :loading="isLoading">
+                        <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+                        <template slot="items" slot-scope="props">
+                            <td>{{ props.item.name }}</td>
+                            <td class="text-xs-right">{{ props.item.description }}</td>
+                            <td class="text-xs-right">{{ props.item.created_at }}</td>
+                            <td class="justify-center layout px-0">
+                                <v-tooltip bottom>
+                                    <v-btn slot="activator" icon class="mx-0" @click="openEdit(props.item)">
+                                        <v-icon small color="blue darken-2">edit</v-icon>
+                                    </v-btn>
+                                    <span>Edit</span>
+                                </v-tooltip>
+                                <v-tooltip bottom>
+                                    <v-btn slot="activator" icon class="mx-0" @click="deleteItem(props.item)">
+                                        <v-icon small color="red darken-2">delete</v-icon>
+                                    </v-btn>
+                                    <span>delete</span>
+                                </v-tooltip>
+                            </td>
+                        </template>
+                        <v-alert slot="no-results" :value="true" color="error" icon="warning">
+                            Your search for "{{ search }}" found no results.
+                        </v-alert>
+                    </v-data-table>
                 </v-card>
+                <v-snackbar :timeout="timeout" bottom="bottom" :color="color" left='left' v-model="snackbar">
+                    {{ message }}
+                    <v-icon dark right>check_circle</v-icon>
+                </v-snackbar>
             </v-layout>
         </v-container>
     </v-content>
@@ -71,7 +63,7 @@ import AddRole from './AddRole.vue'
 // // import ShowRole from './ShowRole.vue'
 import EditRole from './EditRole.vue'
 export default {
-    props: ['user'],
+    props: ['user', 'role'],
     components: {
         AddRole,
         // ShowRole,
@@ -79,30 +71,56 @@ export default {
     },
     data() {
         return {
-            loader: false,
-            isEmpty: false,
-            isBordered: true,
-            isStriped: true,
-            isNarrowed: false,
-            isHoverable: true,
-            isFocusable: true,
-            hasMobileCards: true,
-            isPaginated: true,
-            currentPage: 1,
-            perPage: 5,
+            headers: [{
+                    text: "Name",
+                    value: "name"
+                },
+                {
+                    text: "Description",
+                    value: "description"
+                },
+                {
+                    text: "Created At",
+                    value: "created_at"
+                },
+                {
+                    text: 'Actions',
+                    value: 'name',
+                    sortable: false
+                }
+            ],
             search: '',
-            permEdit: false,
+            loader: false,
+            dispAdd: false,
+            dispShow: false,
+            dispEdit: false,
+            snackbar: false,
+            loading: false,
+            timeout: 5000,
+            color: 'black',
+            message: 'Success',
+            userPerm: [],
+            temp: '',
+            editedItem: {},
         }
     },
     methods: {
         openShow(key) {
-
+            // this.$children[4].list = this.company[key]
+            this.$children[2].list = this.roles[key]
+            this.dispShow = true
         },
         openAdd() {
             eventBus.$emit('openCreateRoleEvent')
         },
         openEdit(item) {
-
+            eventBus.$emit('openEditRoleEvent', item)
+            this.$store.dispatch('getUserPerm', item.id)
+        },
+        showAlert() {
+            this.message = 'Successifully Added';
+            this.snackbar = true;
+            this.color = 'black';
         },
 
         deleteItem(item) {
@@ -115,7 +133,7 @@ export default {
                 axios.delete(`/roles/${item}`)
                     .then((response) => {
                         this.snackbar = false
-                        this.AllRoles.splice(index, 1)
+                        this.roles.splice(index, 1)
                         this.message = 'deleted successifully'
                         this.color = 'red'
                         this.snackbar = true
@@ -129,26 +147,26 @@ export default {
                     })
             }
         },
-
+        close() {
+            this.dispAdd = this.dispShow = this.dispEdit = false
+        },
         getRoles() {
-            this.$store.dispatch('getRoles')
-                .then(() => {
-                    this.loader = false
-                })
+            this.$store.dispatch('getRoles').then(response => {
+                this.loader = false
+            })
+        },
+    },
+    computed: {
+        roles() {
+            return this.$store.getters.roles
+        },
+        isLoading() {
+            return this.$store.getters.loading;
         },
     },
     mounted() {
         this.loader = true
         this.getRoles()
-    },
-    computed: {
-        roles() {
-            return this.$store.getters.roles;
-        },
-
-        isLoading() {
-            return this.$store.getters.loading;
-        },
     },
     //   beforeRouteEnter(to, from, next) {
     //     next(vm => {
@@ -162,3 +180,8 @@ export default {
 }
 </script>
 
+<style>
+.container {
+    /* margin-top: -30px; */
+}
+</style>

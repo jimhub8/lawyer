@@ -11,12 +11,12 @@
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
-                    <v-layout wrap v-show="!loader">
+                    <v-layout wrap>
                         <v-form ref="form" @submit.prevent>
                             <v-container grid-list-xl fluid>
                                 <v-layout wrap>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.name" color="blue darken-2" label="Full name" required></v-text-field>
+                                        <v-text-field v-model="form.name" color="purple darken-2" label="Full name" required></v-text-field>
                                         <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
@@ -28,8 +28,12 @@
                                         <small class="has-text-danger" v-if="errors.address">{{ errors.address[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
-                                        <v-text-field v-model="form.city" color="blue darken-2" label="City" required></v-text-field>
-                                        <small class="has-text-danger" v-if="errors.city">{{ errors.city[0] }}</small>
+                                        <v-text-field v-model="form.department" color="blue darken-2" label="Department" required></v-text-field>
+                                        <small class="has-text-danger" v-if="errors.department">{{ errors.department[0] }}</small>
+                                    </v-flex>
+                                    <v-flex xs12 sm6>
+                                        <v-text-field v-model="form.position" color="blue darken-2" label="position" required></v-text-field>
+                                        <small class="has-text-danger" v-if="errors.position">{{ errors.position[0] }}</small>
                                     </v-flex>
                                     <v-flex xs12 sm6>
                                         <v-text-field v-model="form.phone" color="blue darken-2" label="Phone" required></v-text-field>
@@ -42,7 +46,6 @@
                                         </select>
                                         <small class="has-text-danger" v-if="errors.role_id">{{ errors.role_id[0] }}</small>
                                     </div>
-
                                 </v-layout>
                             </v-container>
                             <v-card-actions>
@@ -68,7 +71,8 @@ export default {
             email: "",
             phone: "",
             address: "",
-            city: ""
+            department: "",
+            position: "",
         });
         return {
             loading: false,
@@ -77,7 +81,6 @@ export default {
             permissions: [],
             defaultForm,
             dialog: false,
-            e1: true,
             form: Object.assign({}, defaultForm),
         };
     },
@@ -89,11 +92,11 @@ export default {
                 .then(response => {
                     // alert('error1')
                     this.loading = false;
-                    this.$store.dispatch('getUsers')
-                    this.$store.dispatch('alertEvent', 'User created')
                     // console.log(response);
-                    this.close();
                     // this.resetForm();
+                    eventBus.$emit('alertRequest', 'User added');
+                    // this.close();
+                    this.$store.dispatch('getUsers')
                 })
                 .catch(error => {
                     // alert('error2')
@@ -107,9 +110,6 @@ export default {
                     this.errors = error.response.data.errors;
                 });
         },
-        getRoles() {
-            this.$store.dispatch('getRoles')
-        },
         resetForm() {
             this.form = Object.assign({}, this.defaultForm);
             this.$refs.form.reset();
@@ -118,24 +118,35 @@ export default {
             this.dialog = false
         }
     },
+    mounted() {
+        axios
+            .post("/getCompanyAdmin")
+            .then(response => {
+                this.Allusers = response.data;
+            })
+            .catch(error => {
+                this.errors = error.response.data.errors;
+            });
+
+        axios
+            .get("/getPermissions")
+            .then(response => {
+                console.log(response.data);
+                this.permissions = response.data;
+            })
+            .catch(errors => {
+                this.errors = error.response.data.errors;
+            });
+    },
     created() {
         eventBus.$on('openCreateUserEvent', data => {
             this.dialog = true
-            this.getRoles()
-        })
+        });
     },
+
     computed: {
-        formIsValid() {
-            return (
-                this.form.name &&
-                this.form.email &&
-                this.form.phone &&
-                this.form.address &&
-                this.form.city
-            );
-        },
         roles() {
-            return this.$store.getters.roles;
+            return this.$store.getters.roles
         },
     },
     mounted() {}

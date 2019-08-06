@@ -37,13 +37,13 @@ class UserController extends Controller
     {
         // return $this->generateRandomString();
         // return $request->all();
-        $this->Validate($request, [
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'role_id' => 'required',
-        ]);
         // return $request->all();
+        // $this->Validate($request, [
+        //     'name' => 'required',
+        //     'email' => 'required|email',
+        //     'phone' => 'required',
+        //     'role_id' => 'required',
+        // ]);
         $user = new User;
         $password = $this->generateRandomString();
         $password_hash = Hash::make($password);
@@ -51,15 +51,14 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
-        $user->branch_id = $request->branch_id;
+        $user->department = $request->department;
         $user->address = $request->address;
-        $user->city = $request->city;
+        $user->position = $request->position;
         // $user->country_id = $request->countryList;
         // $user->activation_token = str_random(60);
         $user->save();
         $user->assignRole($request->role_id);
-        $user->givePermissionTo($request->selected);
-        $user->notify(new SignupActivate($user, $password));
+        // $user->notify(new SignupActivate($user, $password));
         return $user;
     }
     public function generateRandomString($length = 10)
@@ -87,39 +86,22 @@ class UserController extends Controller
         $this->Validate($request, [
             'name' => 'required',
             'email' => 'required|email',
-            'phone' => 'required|numeric',
+            // 'phone' => 'required|numeric',
             // 'branch_id' => 'required',
             // 'address' => 'required',
             // 'city' => 'required',
             // 'country' => 'required',
-            'role_id' => 'required'
+            // 'role_id' => 'required'
         ]);
         $user = User::find($id);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
-        // $user->branch_id = $request->branch_id;
+        $user->department = $request->department;
         $user->address = $request->address;
-        // $user->city = $request->city;
-        // $user->country = $request->country;
-        // $user->country_id = $request->country_id;
+        $user->position = $request->position;
         $user->save();
-        // foreach ($request->roles as $role) {
-        //     $role_name = $role['name'];
-        // }
         $user->syncRoles($request->role_id);
-
-        // $p_all = Permission::all();//Get all permissions
-
-        // foreach ($p_all as $p) {
-        //     $user->revokePermissionTo($p); //Remove all permissions associated with role
-        // }
-
-        // $user->givePermissionTo($request->selected);
-        // foreach ($permissions as $permission) {
-        //     $p = Permission::where('id', '=', $permission)->firstOrFail(); //Get corresponding form //permission in db
-        //     $role->givePermissionTo($p);  //Assign permission to role
-        // }
 
         return $user;
     }

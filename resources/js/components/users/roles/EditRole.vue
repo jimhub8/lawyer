@@ -1,40 +1,34 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="openEditRequest" persistent max-width="700px">
+    <v-dialog v-model="dialog" persistent max-width="700px">
         <v-card>
             <v-card-title fixed>
-                <span class="headline">Add Role</span>
+                <span class="headline">Edit Role</span>
                 <v-spacer></v-spacer>
-                <v-btn icon dark @click="close">
+                <v-btn icon dark @click="dialog = false">
                     <v-icon color="black">close</v-icon>
                 </v-btn>
             </v-card-title>
             <v-card-text>
                 <v-container grid-list-md>
                     <v-layout wrap>
-                        <v-form ref="form" @submit.prevent>
-                            <v-container grid-list-xl fluid>
-                                <v-layout wrap>
-                                    <v-flex xs12 sm12>
-                                        <v-text-field v-model="form.name" :rules="rules.name" color="blue darken-2" label="Role" required></v-text-field>
-                                        <!-- <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small> -->
-                                    </v-flex>
-                                </v-layout>
-                                <v-layout wrap>
-                                    <v-flex v-for="(perm, index) in sortPerm" :key="index" xs6 sm3>
-                                        <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
-                                    </v-flex>
-                                </v-layout>
-                            </v-container>
-                            <v-card-actions>
-                                <v-btn flat @click="resetForm">reset</v-btn>
-                                <v-btn flat @click="close">Close</v-btn>
-                                <v-spacer></v-spacer>
-                                <v-btn :disabled="loading" flat color="primary" @click="save" :loading="loading">Submit</v-btn>
-                            </v-card-actions>
-                        </v-form>
+                        <v-flex xs12 sm12>
+                            <v-text-field v-model="form.name" color="blue darken-2" label="Role" required></v-text-field>
+                            <!-- <small class="has-text-danger" v-if="errors.name">{{ errors.name[0] }}</small> -->
+                        </v-flex>
+                        <v-layout wrap>
+                            <v-flex v-for="(perm, index) in permissions" :key="index" xs6 sm3>
+                                <v-checkbox v-model="selected" :label="perm.name" :value="perm.name"></v-checkbox>
+                            </v-flex>
+                        </v-layout>
                     </v-layout>
                 </v-container>
+                <v-card-actions>
+                    <v-btn flat @click="resetForm">reset</v-btn>
+                    <v-btn flat @click="dialog = false">Close</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn :disabled="loading" flat color="primary" @click="save" :loading="loading">Submit</v-btn>
+                </v-card-actions>
             </v-card-text>
         </v-card>
     </v-dialog>
@@ -43,16 +37,12 @@
 
 <script>
 export default {
-    props: ["openEditRequest", "form", "userPerm"],
     data() {
         return {
+            form: {},
             loading: false,
-            loader: false,
+            dialog: false,
             selected: [],
-            permissions: [],
-            rules: {
-                name: [val => (val || "").length > 0 || "This field is required"]
-            }
         };
     },
     methods: {
@@ -65,13 +55,8 @@ export default {
                 })
                 .then(response => {
                     this.loading = false;
-                    console.log(response);
-                    this.$emit("alertRequest");
-                    Object.assign(
-                        this.$parent.AllRoles[this.$parent.editedIndex],
-                        this.$parent.editedItem
-                    );
-                    this.$emit("closeRequest");
+            this.$store.dispatch('getRoles')
+                    eventBus.$emit('alertRequest', 'Role updated')
                 })
                 .catch(error => {
                     this.loading = false;
@@ -83,29 +68,25 @@ export default {
             this.$refs.form.reset();
         },
         close() {
-            this.$emit("closeRequest");
+            this.dialog = true
         }
     },
     created() {
         eventBus.$on("RolepermEvent", data => {
             this.selected = data;
         });
-    },
-    mounted() {
-        axios
-            .get("/getPermissions")
-            .then(response => {
-                this.permissions = response.data;
-            })
-            .catch(errors => {
-                this.errors = error.response.data.errors;
-            });
+        eventBus.$on("openEditRoleEvent", data => {
+            this.dialog = true;
+            this.form = data
+        });
     },
     computed: {
-
-        sortPerm() {
-            return _.orderBy(this.permissions, 'name', 'asc')
-        }
+        permissions() {
+            this.$store.getters.user_perm
+        },
+        // sortPerm() {
+        //     return _.orderBy(this.permissions, 'name', 'asc')
+        // }
     },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
 <v-layout row justify-center>
-    <v-dialog v-model="openPermRequest" persistent max-width="700px">
+    <v-dialog v-model="dialog" persistent max-width="700px">
         <v-card>
             <v-card-title fixed>
                 <span class="headline">Permissions</span>
@@ -30,14 +30,13 @@
 
 <script>
 export default {
-    props: ['openPermRequest', 'form'],
     data() {
         return {
             e1: true,
             loader: false,
+            dialog: false,
             loading: false,
             selected: [],
-            permissions: [],
         }
     },
     methods: {
@@ -62,12 +61,17 @@ export default {
             this.$refs.form.reset()
         },
         close() {
-            this.$emit('closeRequest')
+            this.dialog = false
         },
     },
     created() {
         eventBus.$on('permEvent', data => {
             this.selected = data;
+        });
+
+        eventBus.$on('openPermissionEvent', data => {
+            this.dialog = true
+            this.form = data
         });
     },
     computed: {
@@ -85,6 +89,9 @@ export default {
         },
         sortPerm() {
             return _.orderBy(this.permissions, 'name', 'asc')
+        },
+        permissions() {
+            this.$store.getters.user_perm
         }
     },
     mounted() {

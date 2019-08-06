@@ -92,7 +92,7 @@
                                     </template>
                                     <v-card color="grey lighten-4" min-width="350px" flat>
                                         <v-toolbar color="primary" dark>
-                                            <v-btn icon>
+                                            <v-btn icon @click="openEdit(event)">
                                                 <v-icon>edit</v-icon>
                                             </v-btn>
                                             <v-toolbar-title v-html="event.title"></v-toolbar-title>
@@ -121,12 +121,13 @@
             </v-flex>
         </v-layout>
     </v-container>
+    <myTask></myTask>
 </v-content>
 </template>
 
 <script>
+import myTask from '../task/Edit'
 const weekdaysDefault = [0, 1, 2, 3, 4, 5, 6]
-
 const intervalsDefault = {
     first: 0,
     minutes: 60,
@@ -160,65 +161,68 @@ const stylings = {
 }
 
 export default {
+    components: {
+        myTask,
+    },
     data: () => ({
         dark: false,
         startMenu: false,
-        start: '2019-01-12',
+        start: new Date(),
         endMenu: false,
         end: '2019-01-27',
         nowMenu: false,
         minWeeks: 1,
         now: null,
         today: '2019-01-08',
-        events: [{
-                title: 'Vacation',
-                details: 'Going to the beach!',
-                date: '2018-12-30',
-                open: false
-            },
-            {
-                title: 'Vacation',
-                details: 'Going to the beach!',
-                date: '2018-12-31',
-                open: false
-            },
-            {
-                title: 'Vacation',
-                details: 'Going to the beach!',
-                date: '2019-01-01',
-                open: false
-            },
-            {
-                title: 'Meeting',
-                details: 'Spending time on how we do not have enough time',
-                date: '2019-01-07',
-                open: false
-            },
-            {
-                title: '30th Birthday',
-                details: 'Celebrate responsibly',
-                date: '2019-01-03',
-                open: false
-            },
-            {
-                title: 'New Year',
-                details: 'Eat chocolate until you pass out',
-                date: '2019-01-01',
-                open: false
-            },
-            {
-                title: 'Conference',
-                details: 'Mute myself the whole time and wonder why I am on this call',
-                date: '2019-01-21',
-                open: false
-            },
-            {
-                title: 'Hackathon',
-                details: 'Code like there is no tommorrow',
-                date: '2019-02-01',
-                open: false
-            }
-        ],
+        // events: [{
+        //         title: 'Court Day',
+        //         details: 'High Court!',
+        //         date: '2019-12-30',
+        //         open: false
+        //     },
+        //     {
+        //         title: 'Court Day',
+        //         details: 'High Court!',
+        //         date: '20189-12-31',
+        //         open: false
+        //     },
+        //     {
+        //         title: 'Court Day',
+        //         details: 'High Court!',
+        //         date: '2019-01-01',
+        //         open: false
+        //     },
+        //     {
+        //         title: 'Meeting',
+        //         details: 'Spending time on how we do not have enough time',
+        //         date: '2019-01-07',
+        //         open: false
+        //     },
+        //     {
+        //         title: '30th Birthday',
+        //         details: 'Celebrate responsibly',
+        //         date: '2019-01-03',
+        //         open: false
+        //     },
+        //     {
+        //         title: 'New Year',
+        //         details: 'Eat chocolate until you pass out',
+        //         date: '2019-01-01',
+        //         open: false
+        //     },
+        //     {
+        //         title: 'Conference',
+        //         details: 'Mute myself the whole time and wonder why I am on this call',
+        //         date: '2019-01-21',
+        //         open: false
+        //     },
+        //     {
+        //         title: 'Hackathon',
+        //         details: 'Code like there is no tommorrow',
+        //         date: '2019-02-01',
+        //         open: false
+        //     }
+        // ],
         type: 'month',
         typeOptions: [{
                 text: 'Day',
@@ -428,13 +432,30 @@ export default {
             const map = {}
             this.events.forEach(e => (map[e.date] = map[e.date] || []).push(e))
             return map
+        },
+        events() {
+            return this.$store.getters.events
         }
     },
     methods: {
         showIntervalLabel(interval) {
             return interval.minute === 0
+        },
+        getEvents() {
+            this.$store.dispatch('getEvents')
+        },
+        openEdit(data) {
+            eventBus.$emit('openEditTask', data)
         }
-    }
+    },
+    created () {
+        eventBus.$on('TaskRefreshEvent', data => {
+            this.getEvents()
+        });
+    },
+    mounted () {
+        this.getEvents();
+    },
 }
 </script>
 
@@ -491,5 +512,9 @@ export default {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+}
+.my-event {
+    background: #1867c0;
+    color: #fff;
 }
 </style>

@@ -8,123 +8,53 @@
                         <el-card shadow="hover">
                             <div class="text-center">
                                 <p style="font-size: 36px;color: #1093de;">0</p>
-                                <small>QTY</small>
+                                <small>Today</small>
                                 <!-- <v-icon dark right style="padding: 0;font-size: 39px !important;">check_circle</v-icon><span>Hover</span> -->
-                                <h5>TO BE PACKED</h5>
+                                <h5>Today Cases</h5>
                             </div>
                         </el-card>
                     </el-col>
                     <el-col :span="4">
                         <el-card shadow="hover">
                             <div class="text-center">
-                                <p style="font-size: 36px;color: #db3f26;">0</p>
-                                <small>PKGS</small>
+                                <p style="font-size: 36px;color: #db3f26;">2</p>
+                                <small>Cases</small>
                                 <!-- <v-icon dark right style="padding: 0;font-size: 39px !important;">check_circle</v-icon><span>Hover</span> -->
-                                <h5>TO BE SHIPPED</h5>
+                                <h5>All Cases</h5>
                             </div>
                         </el-card>
                     </el-col>
                     <el-col :span="4">
                         <el-card shadow="hover">
                             <div class="text-center">
-                                <p style="font-size: 36px;color: #388a10;">0</p>
-                                <small>PKGS</small>
+                                <p style="font-size: 36px;color: #388a10;">5</p>
+                                <small>firms</small>
                                 <!-- <v-icon dark right style="padding: 0;font-size: 39px !important;">check_circle</v-icon><span>Hover</span> -->
-                                <h5>TO BE DELIVERED</h5>
+                                <h5>Firms</h5>
                             </div>
                         </el-card>
                     </el-col>
                     <el-col :span="4">
                         <el-card shadow="hover">
                             <div class="text-center">
-                                <p style="font-size: 36px;color: #f4a204;">0</p>
-                                <small>QTY</small>
+                                <p style="font-size: 36px;color: #f4a204;">4</p>
+                                <small>Closed</small>
                                 <!-- <v-icon dark right style="padding: 0;font-size: 39px !important;">check_circle</v-icon><span>Hover</span> -->
-                                <h5>TO BE INVOICED</h5>
+                                <h5>Closed</h5>
                             </div>
                         </el-card>
                     </el-col>
-                    <v-divider vertical></v-divider>
-                    <el-col :span="6">
+                    <el-col :span="4">
                         <el-card shadow="hover">
-                            <div>
-                                <h4>QUANTITY ON HAND <span style="float:right;border-left: 1px solid;padding-left: 10px;">{{ onhand }}</span> </h4>
-                            </div>
-                        </el-card>
-                        <el-card shadow="hover">
-                            <div>
-                                <h4>QUANTITY TO BE RECEIVED <span style="float:right;border-left: 1px solid;padding-left: 10px;">{{ tobe_received }}</span> </h4>
+                            <div class="text-center">
+                                <p style="font-size: 36px;color: #f4a204;">4</p>
+                                <small>Open</small>
+                                <!-- <v-icon dark right style="padding: 0;font-size: 39px !important;">check_circle</v-icon><span>Hover</span> -->
+                                <h5>Open</h5>
                             </div>
                         </el-card>
                     </el-col>
                 </el-row>
-                <v-layout wrap>
-                    <v-card style="padding: 20px; width: 100%;">
-                        <v-flex sm12>
-                            <v-layout wrap>
-                                <v-flex sm12>
-                                    <el-row :gutter="12" style="width: 100%">
-                                        <el-col :span="12">
-                                            <el-card shadow="hover">
-                                                <h2>PRODUCT DETAILS</h2>
-                                                <v-divider></v-divider>
-                                                <ul class="list-group">
-                                                    <v-layout wrap>
-                                                        <v-flex sm7>
-                                                            <div>
-                                                                <li class="list-group-item row " style="color: #db3f26">
-                                                                    <label class="col-md-8 col-lg-8"><b>Low Stock Items</b></label><small style="float: right;">{{ low_stoke }}</small>
-                                                                </li>
-                                                                <li class="list-group-item row">
-                                                                    <label class="col-md-5 col-lg-5"><b>All Item Groups</b></label><small style="float: right;">0</small>
-                                                                </li>
-                                                                <li class="list-group-item row">
-                                                                    <label class="col-md-5 col-lg-5"><b>All Items </b></label>
-                                                                    <small style="float: right;">{{ product_count }}</small>
-                                                                </li>
-                                                            </div>
-                                                        </v-flex>
-                                                        <v-flex sm5>
-                                                            <pie-chart :data="active_chart" style="height: 200px;"></pie-chart>
-                                                        </v-flex>
-                                                    </v-layout>
-                                                </ul>
-                                            </el-card>
-                                        </el-col>
-                                        <el-col :span="12">
-                                            <el-card shadow="hover">
-                                                <h2>TOP SELLING ITEMS</h2>
-                                                <v-divider></v-divider>
-                                                <ul class="list-group">
-                                                    <v-layout wrap>
-                                                        <v-flex sm12>
-                                                            <div>
-                                                                <p>No items were invoiced in this time frame</p>
-                                                            </div>
-                                                        </v-flex>
-                                                    </v-layout>
-                                                </ul>
-                                            </el-card>
-                                        </el-col>
-                                    </el-row>
-                                </v-flex>
-
-                                <v-flex sm12 style="margin-top: 30px;">
-                                    <el-row :gutter="12" style="width: 100%">
-                                        <el-col :span="24">
-                                            <el-card shadow="hover">
-                                                <h2>SALES ORDER SUMMARY (IN KES)</h2>
-                                                <v-divider></v-divider>
-                                                  <line-chart :data="chartsummary" :download="true"></line-chart>
-                                            </el-card>
-                                        </el-col>
-                                    </el-row>
-                                </v-flex>
-                            </v-layout>
-                        </v-flex>
-                    </v-card>
-                </v-layout>
-                <!-- <v-btn @click="getBranchCount" flat color="primary">Count</v-btn> -->
             </v-flex>
         </v-layout>
     </v-container>
@@ -165,14 +95,14 @@ export default {
         },
     },
     mounted() {
-        this.$store.dispatch('product_count')
-        this.$store.dispatch('tobe_received')
-        this.$store.dispatch('getOnhand')
-        this.$store.dispatch('getLowstock')
+        // this.$store.dispatch('product_count')
+        // this.$store.dispatch('tobe_received')
+        // this.$store.dispatch('getOnhand')
+        // this.$store.dispatch('getLowstock')
 
-        // Charts
-        this.$store.dispatch('getChartSummary')
-        this.$store.dispatch('getActiveProducts')
+        // // Charts
+        // this.$store.dispatch('getChartSummary')
+        // this.$store.dispatch('getActiveProducts')
     },
 }
 </script>

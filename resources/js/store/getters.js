@@ -33,6 +33,18 @@ export default {
     practice_area(state) {
         return state.practice_area;
     },
+    tasks(state) {
+        return state.tasks;
+    },
+    events(state) {
+        return state.events;
+    },
+    case_stage(state) {
+        return state.case_stage;
+    },
+    user_perm(state) {
+        return state.user_perm;
+    },
 
     // Notifications
     notifications(state) {

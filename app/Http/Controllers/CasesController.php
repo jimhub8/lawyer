@@ -88,4 +88,13 @@ class CasesController extends Controller
     {
         Cases::find($id)->delete();
     }
+
+    public function filterCases(Request $request)
+    {
+        // return $request->all();
+        return $cases = Cases::where('case_stage', $request->case_stage)
+                        ->where('leading_attoney', $request->leading_attoney)
+                        ->where('practice_area', $request->practice_area)
+                        ->paginate(500);
+    }
 }
