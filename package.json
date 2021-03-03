@@ -38,7 +38,7 @@
         "jspdf": "^1.5.3",
         "laravel-file-manager": "^2.4.0",
         "moment": "^2.24.0",
-        "pug": "^2.0.4",
+        "pug": "^3.0.1",
         "read-excel-file": "^4.0.1",
         "vue-chartjs": "^3.4.0",
         "vue-chartkick": "^0.5.1",
