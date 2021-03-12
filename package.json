@@ -35,7 +35,7 @@
         "chart.js": "^2.8.0",
         "chartkick": "^3.1.0",
         "element-ui": "^2.8.2",
-        "jspdf": "^1.5.3",
+        "jspdf": "^2.3.1",
         "laravel-file-manager": "^2.4.0",
         "moment": "^2.24.0",
         "pug": "^2.0.4",
